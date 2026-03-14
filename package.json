@@ -1,0 +1,14 @@
+{
+  "name": "ai-digest",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "digest": "tsx src/index.ts",
+    "test": "tsx src/index.ts --dry-run"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.52.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.5.0"
+  }
+}
