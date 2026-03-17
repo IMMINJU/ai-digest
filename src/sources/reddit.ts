@@ -16,25 +16,32 @@ export async function fetchReddit(): Promise<Article[]> {
   for (const sub of SUBREDDITS) {
     try {
       const res = await fetch(
-        `https://old.reddit.com/r/${sub}/hot.json?limit=15`,
+        `https://www.reddit.com/r/${sub}/hot.rss?limit=15`,
         {
           headers: {
-            "User-Agent": "ai-digest-bot/1.0",
+            "User-Agent": "Mozilla/5.0 (compatible; ai-digest-bot/1.0)",
           },
         }
       );
       if (!res.ok) continue;
 
-      const data = await res.json();
-      const posts = data?.data?.children ?? [];
+      const xml = await res.text();
+      const entries = xml.split("<entry>").slice(1);
 
-      for (const post of posts) {
-        const d = post.data;
-        if (d.stickied) continue;
+      for (const entry of entries) {
+        const title =
+          entry.match(/<title>(.*?)<\/title>/)?.[1] ?? "";
+        const url =
+          entry.match(/<link[^>]*href="([^"]*)"[^>]*\/>/)?.[1] ??
+          entry.match(/<link[^>]*href="([^"]*)"/)?.[1] ??
+          "";
+
+        if (!title || !url) continue;
+
         results.push({
-          title: d.title,
-          url: `https://reddit.com${d.permalink}`,
-          score: d.score ?? 0,
+          title,
+          url,
+          score: 0,
           source: `r/${sub}`,
         });
       }
@@ -43,5 +50,5 @@ export async function fetchReddit(): Promise<Article[]> {
     }
   }
 
-  return results.sort((a, b) => b.score - a.score).slice(0, 15);
+  return results.slice(0, 15);
 }
