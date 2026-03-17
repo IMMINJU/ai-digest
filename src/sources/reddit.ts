@@ -16,7 +16,7 @@ export async function fetchReddit(): Promise<Article[]> {
   for (const sub of SUBREDDITS) {
     try {
       const res = await fetch(
-        `https://www.reddit.com/r/${sub}/hot.json?limit=15`,
+        `https://old.reddit.com/r/${sub}/hot.json?limit=15`,
         {
           headers: {
             "User-Agent": "ai-digest-bot/1.0",

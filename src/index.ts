@@ -35,19 +35,11 @@ async function main() {
     weekday: "long",
   });
 
-  const title = `AI Digest — ${today}`;
+  const message = `🤖 *AI Digest — ${today}*\n\n${digest}`;
 
   if (isDryRun) {
     console.log("\n--- DRY RUN ---\n");
-    console.log(`📊 ${title}`);
-    console.log(`\n트렌드: ${digest.trend}\n`);
-    for (const cat of digest.categories) {
-      console.log(`\n[${cat.category}]`);
-      for (const item of cat.items) {
-        console.log(`  • ${item.title}: ${item.summary}`);
-        console.log(`    ${item.url}`);
-      }
-    }
+    console.log(message);
     return;
   }
 
@@ -57,7 +49,7 @@ async function main() {
   }
 
   console.log("📤 Sending to Google Chat...");
-  await sendToGoogleChat(webhookUrl, title, digest);
+  await sendToGoogleChat(webhookUrl, message);
   console.log("✅ Done!");
 }
 
