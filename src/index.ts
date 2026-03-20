@@ -10,12 +10,25 @@ const isDryRun = process.argv.includes("--dry-run");
 async function main() {
   console.log("📡 Collecting articles...");
 
-  const [hn, reddit, ph, gn] = await Promise.all([
+  const results = await Promise.allSettled([
     fetchHackerNews(),
     fetchReddit(),
     fetchProductHunt(),
     fetchGeekNews(),
   ]);
+
+  const extract = <T>(r: PromiseSettledResult<T[]>, name: string): T[] => {
+    if (r.status === "fulfilled") return r.value;
+    console.warn(`⚠️ ${name} failed:`, (r.reason as Error).message);
+    return [];
+  };
+
+  const [hn, reddit, ph, gn] = [
+    extract(results[0], "HackerNews"),
+    extract(results[1], "Reddit"),
+    extract(results[2], "ProductHunt"),
+    extract(results[3], "GeekNews"),
+  ];
 
   const all = [...hn, ...reddit, ...ph, ...gn];
   console.log(`  HN: ${hn.length}, Reddit: ${reddit.length}, PH: ${ph.length}, GeekNews: ${gn.length} → Total: ${all.length}`);
