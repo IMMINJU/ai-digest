@@ -2,6 +2,7 @@ import { fetchHackerNews } from "./sources/hackernews.js";
 import { fetchReddit } from "./sources/reddit.js";
 import { fetchProductHunt } from "./sources/producthunt.js";
 import { fetchGeekNews } from "./sources/geeknews.js";
+import { fetchGitHubTrending } from "./sources/github.js";
 import { summarize } from "./summarizer.js";
 import { sendToGoogleChat } from "./notifier.js";
 
@@ -15,6 +16,7 @@ async function main() {
     fetchReddit(),
     fetchProductHunt(),
     fetchGeekNews(),
+    fetchGitHubTrending(),
   ]);
 
   const extract = <T>(r: PromiseSettledResult<T[]>, name: string): T[] => {
@@ -23,15 +25,16 @@ async function main() {
     return [];
   };
 
-  const [hn, reddit, ph, gn] = [
+  const [hn, reddit, ph, gn, gh] = [
     extract(results[0], "HackerNews"),
     extract(results[1], "Reddit"),
     extract(results[2], "ProductHunt"),
     extract(results[3], "GeekNews"),
+    extract(results[4], "GitHubTrending"),
   ];
 
-  const all = [...hn, ...reddit, ...ph, ...gn];
-  console.log(`  HN: ${hn.length}, Reddit: ${reddit.length}, PH: ${ph.length}, GeekNews: ${gn.length} → Total: ${all.length}`);
+  const all = [...hn, ...reddit, ...ph, ...gn, ...gh];
+  console.log(`  HN: ${hn.length}, Reddit: ${reddit.length}, PH: ${ph.length}, GeekNews: ${gn.length}, GitHub: ${gh.length} → Total: ${all.length}`);
 
   if (all.length === 0) {
     console.log("No articles found. Skipping.");

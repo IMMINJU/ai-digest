@@ -8,6 +8,7 @@ AI 관련 뉴스를 자동 수집하고, Claude로 요약해서 매일 아침 Go
 - **Reddit** — ChatGPT, LocalLLaMA, ClaudeAI, AI_Agents, singularity, ArtificialIntelligence, OpenAI
 - **Product Hunt** — AI 관련 신규 프로덕트
 - **GeekNews** — 한국 개발/기술 뉴스
+- **GitHub Trending** — 일간 트렌딩 리포 중 AI 관련 필터링
 
 ## How it works
 
