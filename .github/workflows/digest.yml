@@ -1,10 +1,8 @@
 name: AI Digest
 
 on:
-  schedule:
-    # 평일 10:00 KST = 01:00 UTC
-    - cron: "0 1 * * 1-5"
-  workflow_dispatch: # 수동 실행용
+  # 평일 10:00 KST에 cron-job.org가 workflow_dispatch API로 실행한다
+  workflow_dispatch:
 
 jobs:
   digest:
